@@ -1,4 +1,15 @@
-FROM 		gliderlabs/alpine
+# bash-4.3# ldd /bin/consul
+#   /lib64/ld-linux-x86-64.so.2 (0x7f806af08000)
+#   libpthread.so.0 => /lib64/ld-linux-x86-64.so.2 (0x7f806af08000)
+#   libc.so.6 => /lib64/ld-linux-x86-64.so.2 (0x7f806af08000)
+# Error relocating /bin/consul: __fprintf_chk: symbol not found
+# Error relocating /bin/consul: __sprintf_chk: symbol not found
+#
+# See
+#  http://www.blang.io/2015/04/19/golang-alpine-build-golang-binaries-for-alpine-linux.html
+#  http://www.openwall.com/lists/musl/2015/06/17/1
+
+FROM 		ubuntu:14.10
 MAINTAINER 	Jeff Lindsay <progrium@gmail.com>
 
 ADD https://dl.bintray.com/mitchellh/consul/0.4.0_linux_amd64.zip /tmp/consul.zip
@@ -10,7 +21,12 @@ RUN cd /tmp && unzip /tmp/webui.zip && mv dist /ui && rm /tmp/webui.zip
 ADD https://get.docker.io/builds/Linux/x86_64/docker-1.2.0 /bin/docker
 RUN chmod +x /bin/docker
 
-RUN apk --update add curl bash
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y curl bash && \
+    apt-get clean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 ADD ./config /config/
 ONBUILD ADD ./config /config/
