@@ -12,6 +12,13 @@
 FROM 		ubuntu:14.10
 MAINTAINER 	Jeff Lindsay <progrium@gmail.com>
 
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y bash curl unzip && \
+    apt-get clean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/
+
 ADD https://dl.bintray.com/mitchellh/consul/0.4.0_linux_amd64.zip /tmp/consul.zip
 RUN cd /bin && unzip /tmp/consul.zip && chmod +x /bin/consul && rm /tmp/consul.zip
 
@@ -20,13 +27,6 @@ RUN cd /tmp && unzip /tmp/webui.zip && mv dist /ui && rm /tmp/webui.zip
 
 ADD https://get.docker.io/builds/Linux/x86_64/docker-1.2.0 /bin/docker
 RUN chmod +x /bin/docker
-
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y curl bash && \
-    apt-get clean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 ADD ./config /config/
 ONBUILD ADD ./config /config/
