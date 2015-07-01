@@ -1,4 +1,4 @@
-FROM 		progrium/busybox
+FROM 		gliderlabs/alpine
 MAINTAINER 	Jeff Lindsay <progrium@gmail.com>
 
 ADD https://dl.bintray.com/mitchellh/consul/0.4.0_linux_amd64.zip /tmp/consul.zip
@@ -10,7 +10,7 @@ RUN cd /tmp && unzip /tmp/webui.zip && mv dist /ui && rm /tmp/webui.zip
 ADD https://get.docker.io/builds/Linux/x86_64/docker-1.2.0 /bin/docker
 RUN chmod +x /bin/docker
 
-RUN opkg-install curl bash
+RUN apk --update add curl bash
 
 ADD ./config /config/
 ONBUILD ADD ./config /config/
