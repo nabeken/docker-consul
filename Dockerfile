@@ -9,7 +9,7 @@
 #  http://www.blang.io/2015/04/19/golang-alpine-build-golang-binaries-for-alpine-linux.html
 #  http://www.openwall.com/lists/musl/2015/06/17/1
 
-FROM 		ubuntu:14.10
+FROM debian:jessie
 
 RUN apt-get update && \
     apt-get upgrade -y && \
